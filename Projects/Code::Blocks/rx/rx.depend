@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1372306405 source:/home/aaron/Documents/Development/Source/Main.cpp
+	<SDL/SDL.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	"Input.h"
+
+1372142316 source:/home/aaron/Documents/Development/Source/Input.cpp
+	"Input.h"
+
+1372306663 /home/aaron/Documents/Development/Source/Input.h
+	<SDL/SDL.h>
+	<algorithm>
+

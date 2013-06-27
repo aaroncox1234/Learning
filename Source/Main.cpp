@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Input.h"
+
 static GLboolean should_rotate = GL_TRUE;
 
 static void quit_tutorial( int code )
@@ -20,51 +22,26 @@ static void quit_tutorial( int code )
     exit( code );
 }
 
-static void handle_key_down( SDL_keysym* keysym )
-{
+using namespace rx;
+Input* input;
 
-    /* 
-     * We're only interested if 'Esc' has
-     * been presssed.
-     *
-     * EXERCISE: 
-     * Handle the arrow keys and have that change the
-     * viewing position/angle.
-     */
-    switch( keysym->sym ) {
-    case SDLK_ESCAPE:
-        quit_tutorial( 0 );
-        break;
-    case SDLK_SPACE:
-        should_rotate = !should_rotate;
-        break;
-    default:
-        break;
+static void HandleKeyboardInput()
+{
+    input->Update();
+
+    if ( input->quit || ( input->keys[SDLK_ESCAPE] == KeyState_Pressed ) )
+    {
+        quit_tutorial(0);
     }
 
-}
-
-static void process_events( void )
-{
-    /* Our SDL event placeholder. */
-    SDL_Event event;
-
-    /* Grab all the events off the queue. */
-    while( SDL_PollEvent( &event ) ) {
-
-        switch( event.type ) {
-        case SDL_KEYDOWN:
-            /* Handle key presses. */
-            handle_key_down( &event.key.keysym );
-            break;
-        case SDL_QUIT:
-            /* Handle quit requests (like Ctrl-c). */
-            quit_tutorial( 0 );
-            break;
-        }
-
+    if ( input->keys[SDLK_SPACE] == KeyState_Held )
+    {
+        should_rotate = true;
     }
-
+    else
+    {
+        should_rotate = false;
+    }
 }
 
 static void draw_screen( void )
@@ -105,6 +82,7 @@ static void draw_screen( void )
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     /* We don't want to modify the projection matrix. */
+
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity( );
 
@@ -112,6 +90,7 @@ static void draw_screen( void )
     glTranslatef( 0.0, 0.0, -5.0 );
 
     /* Rotate. */
+
     glRotatef( angle, 0.0, 1.0, 0.0 );
 
     if( should_rotate ) {
@@ -337,13 +316,13 @@ int main( int argc, char* argv[] )
      * handle the resize events properly with
      * glViewport.
      */
-    flags = SDL_OPENGL | SDL_FULLSCREEN;
+    flags = SDL_OPENGL;// | SDL_FULLSCREEN;
 
     /*
      * Set the video mode
      */
     if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 ) {
-        /* 
+        /*
          * This could happen for a variety of reasons,
          * including DISPLAY not being set, the specified
          * resolution not being available, etc.
@@ -359,16 +338,20 @@ int main( int argc, char* argv[] )
      */
     setup_opengl( width, height );
 
+    input = new Input();
+
     /*
      * Now we want to begin our normal app process--
      * an event loop with a lot of redrawing.
      */
-    while( 1 ) {
-        /* Process incoming events. */
-        process_events( );
-        /* Draw the screen. */
+    while (true)
+    {
+        HandleKeyboardInput( );
+
         draw_screen( );
     }
+
+    delete input;
 
     /*
      * EXERCISE:
