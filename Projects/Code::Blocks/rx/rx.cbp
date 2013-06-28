@@ -35,7 +35,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../../../Source/Input.cpp" />
 		<Unit filename="../../../Source/Input.h" />
 		<Unit filename="../../../Source/Main.cpp" />
 		<Extensions>
