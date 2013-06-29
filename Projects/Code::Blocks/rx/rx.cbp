@@ -7,7 +7,8 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/rx" prefix_auto="1" extension_auto="1" />
+				<Option output="../../../Builds/Linux/TestGame" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../../../Builds/Linux/" />
 				<Option object_output="obj/Debug/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -15,7 +16,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add option="-lGL -lGLU -lSDL" />
+					<Add option="-lGL -lGLU -lSDL -lSDL_image" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -28,7 +29,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lGL -lGLU -lSDL" />
+					<Add option="-lGL -lGLU -lSDL -lSDL_image" />
 				</Linker>
 			</Target>
 		</Build>
@@ -37,6 +38,10 @@
 		</Compiler>
 		<Unit filename="../../../Source/Input.h" />
 		<Unit filename="../../../Source/Main.cpp" />
+		<Unit filename="../../../Source/rxTexture.cpp" />
+		<Unit filename="../../../Source/rxTexture.h" />
+		<Unit filename="../../../Source/rxTextureManager.cpp" />
+		<Unit filename="../../../Source/rxTextureManager.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1372306405 source:/home/aaron/Documents/Development/Source/Main.cpp
+1372493162 source:/home/aaron/Documents/Development/Source/Main.cpp
 	<SDL/SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	<stdio.h>
 	<stdlib.h>
-	"Input.h"
+	"rxInput.h"
+	"rxTextureManager.h"
 
 1372142316 source:/home/aaron/Documents/Development/Source/Input.cpp
 	"Input.h"
@@ -13,4 +14,24 @@
 1372306663 /home/aaron/Documents/Development/Source/Input.h
 	<SDL/SDL.h>
 	<algorithm>
+
+1372386901 /home/aaron/Documents/Development/Source/rxInput.h
+	<SDL/SDL.h>
+	<algorithm>
+
+1372491743 /home/aaron/Documents/Development/Source/rxTextureManager.h
+	<string>
+	<vector>
+	"rxTexture.h"
+
+1372491786 /home/aaron/Documents/Development/Source/rxTexture.h
+	<GL/gl.h>
+
+1372492771 source:/home/aaron/Documents/Development/Source/rxTexture.cpp
+	"rxTexture.h"
+
+1372492373 source:/home/aaron/Documents/Development/Source/rxTextureManager.cpp
+	"rxTextureManager.h"
+	<SDL/SDL.h>
+	<SDL/SDL_image.h>
 
