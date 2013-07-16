@@ -16,7 +16,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add option="-lGL -lGLU -lSDL -lSDL_image" />
+					<Add option="-lGL -lGLU -lGLEW -lSDL -lSDL_image" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,7 +29,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lGL -lGLU -lSDL -lSDL_image" />
+					<Add option="-lGL -lGLU -lGLEW -lSDL -lSDL_image" />
 				</Linker>
 			</Target>
 		</Build>
@@ -41,6 +41,8 @@
 		<Unit filename="../../../Source/rxLog.h" />
 		<Unit filename="../../../Source/rxRenderer.cpp" />
 		<Unit filename="../../../Source/rxRenderer.h" />
+		<Unit filename="../../../Source/rxShaderProgram.cpp" />
+		<Unit filename="../../../Source/rxShaderProgram.h" />
 		<Unit filename="../../../Source/rxTexture.cpp" />
 		<Unit filename="../../../Source/rxTexture.h" />
 		<Unit filename="../../../Source/rxTextureManager.cpp" />
