@@ -1,12 +1,14 @@
 # depslib dependency file v1.0
-1372493162 source:/home/aaron/Documents/Development/Source/Main.cpp
+1373938028 source:/home/aaron/Documents/Development/Source/Main.cpp
 	<SDL/SDL.h>
-	<GL/gl.h>
-	<GL/glu.h>
 	<stdio.h>
 	<stdlib.h>
 	"rxInput.h"
+	"rxLog.h"
+	"rxRenderer.h"
+	"rxShaderProgram.h"
 	"rxTextureManager.h"
+	<iostream>
 
 1372142316 source:/home/aaron/Documents/Development/Source/Input.cpp
 	"Input.h"
@@ -24,14 +26,40 @@
 	<vector>
 	"rxTexture.h"
 
-1372491786 /home/aaron/Documents/Development/Source/rxTexture.h
+1373837574 /home/aaron/Documents/Development/Source/rxTexture.h
 	<GL/gl.h>
 
-1372492771 source:/home/aaron/Documents/Development/Source/rxTexture.cpp
+1373775687 source:/home/aaron/Documents/Development/Source/rxTexture.cpp
 	"rxTexture.h"
+	<glm/glm.hpp>
+	<glm/gtx/transform.hpp>
 
 1372492373 source:/home/aaron/Documents/Development/Source/rxTextureManager.cpp
 	"rxTextureManager.h"
 	<SDL/SDL.h>
 	<SDL/SDL_image.h>
+
+1373840424 /home/aaron/Documents/Development/Source/rxRenderer.h
+	<stdexcept>
+	<string>
+
+1373939092 source:/home/aaron/Documents/Development/Source/rxRenderer.cpp
+	"rxRenderer.h"
+	<GL/glew.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1373842253 /home/aaron/Documents/Development/Source/rxLog.h
+	<iostream>
+	<fstream>
+	<string>
+
+1373938004 /home/aaron/Documents/Development/Source/rxShaderProgram.h
+	<GL/glew.h>
+	<GL/gl.h>
+	<string>
+	"rxRenderer.h"
+
+1373938137 source:/home/aaron/Documents/Development/Source/rxShaderProgram.cpp
+	"rxShaderProgram.h"
 

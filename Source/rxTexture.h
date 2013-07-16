@@ -20,4 +20,4 @@ namespace rx
     };
 }
 
-#endif // RX_TEXTURE_MANAGER_H
+#endif // RX_TEXTURE_H
