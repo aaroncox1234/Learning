@@ -36,6 +36,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../../Builds/Linux/TestShaderProgram.glfs" />
+		<Unit filename="../../../Builds/Linux/TestShaderProgram.glvs" />
 		<Unit filename="../../../Source/Main.cpp" />
 		<Unit filename="../../../Source/rxInput.h" />
 		<Unit filename="../../../Source/rxLog.h" />

@@ -8,6 +8,7 @@
 
 namespace rx
 {
+    // TODO: don't have a texture manager. have a SpriteSheet that the owner has to delete. Have the SpriteSheet return Sprites. Enforce power of 2 sprite sheets.
     class TextureManager
     {
     public:

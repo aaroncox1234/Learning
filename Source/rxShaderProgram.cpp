@@ -1,65 +1,63 @@
 #include "rxShaderProgram.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
+#include <fstream>
+#include <sstream>
+
 namespace rx
 {
-    ShaderProgram::ShaderProgram() throw( RendererError ): programID( 0 ),
-                                                           vertexShaderID( 0 ),
-                                                           fragmentShaderID( 0 )
+    ShaderProgram* ShaderProgram::CreateProgramFromFiles( const std::string& vertexShaderPath,
+                                                          const std::string& fragmentShaderPath ) throw( RendererError )
     {
-        programID = glCreateProgram();
+        ShaderProgram* result = new ShaderProgram();
+
+        result->programID = glCreateProgram();
 
         // Vertex shader
 
-        vertexShaderID = glCreateShader( GL_VERTEX_SHADER );
-        const GLchar* vertexShaderSource[] = { "void main() { gl_Position = gl_Vertex; }" };
-        glShaderSource( vertexShaderID, 1, vertexShaderSource, NULL );
-        glCompileShader( vertexShaderID );
-
-        GLint vertexShaderCompiled = GL_FALSE;
-        glGetShaderiv( vertexShaderID, GL_COMPILE_STATUS, &vertexShaderCompiled );
-        if( vertexShaderCompiled != GL_TRUE )
+        try
         {
-            std::string errorMessage = "Failed to compile vertex shader: ";
-            errorMessage += vertexShaderID;
-            errorMessage += GetVertexShaderLog();
-            throw RendererError( errorMessage );
+            result->vertexShaderID = LoadShaderFromFile( vertexShaderPath, GL_VERTEX_SHADER );
+        }
+        catch ( const RendererError& error )
+        {
+            delete result;
+            throw error;
         }
 
-        glAttachShader( programID, vertexShaderID );
+        glAttachShader( result->programID, result->vertexShaderID );
 
         // Fragment shader
 
-        fragmentShaderID = glCreateShader( GL_FRAGMENT_SHADER );
-        const GLchar* fragmentShaderSource[] = { "void main() { gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 ); }" };
-        glShaderSource( fragmentShaderID, 1, fragmentShaderSource, NULL );
-        glCompileShader( fragmentShaderID );
-
-        GLint fragmentShaderCompiled = GL_FALSE;
-        glGetShaderiv( fragmentShaderID, GL_COMPILE_STATUS, &fragmentShaderCompiled );
-        if( fragmentShaderCompiled != GL_TRUE )
+        try
         {
-            std::string errorMessage = "Failed to compile fragment shader: ";
-            errorMessage += fragmentShaderID;
-            errorMessage += GetFragmentShaderLog();
-            throw RendererError( errorMessage );
+            result->fragmentShaderID = LoadShaderFromFile( fragmentShaderPath, GL_FRAGMENT_SHADER );
+        }
+        catch ( const RendererError& error )
+        {
+            delete result;
+            throw error;
         }
 
-        glAttachShader( programID, fragmentShaderID );
+        glAttachShader( result->programID, result->fragmentShaderID );
 
         // Link program
 
         GLint programSuccess = GL_TRUE;
-        glLinkProgram( programID );
+        glLinkProgram( result->programID );
 
-        glGetProgramiv( programID, GL_LINK_STATUS, &programSuccess );
+        glGetProgramiv( result->programID, GL_LINK_STATUS, &programSuccess );
         if( programSuccess != GL_TRUE )
-        if( fragmentShaderCompiled != GL_TRUE )
         {
-            std::string errorMessage = "Failed to link shader program: ";
-            errorMessage += programID;
-            errorMessage += GetProgramLog();
-            throw RendererError( errorMessage );
+            std::stringstream errorMessage;
+            errorMessage << "Failed to link shader program: " << result->programID << std::endl;
+            errorMessage << "\t" << result->GetProgramLog();
+            delete result;
+            throw RendererError( errorMessage.str() );
         }
+
+        return result;
     }
 
     ShaderProgram::~ShaderProgram()
@@ -86,21 +84,85 @@ namespace rx
         glUseProgram( 0 );
     }
 
+    void ShaderProgram::LoadUniform( const std::string& uniformName ) throw( RendererError )
+    {
+        GLint location = glGetUniformLocation( programID, uniformName.c_str() );
+
+        if ( location == -1 )
+        {
+            std::stringstream errorMessage;
+            errorMessage << "Invalid shader program uniform: " << uniformName;
+            throw RendererError( errorMessage.str() );
+        }
+
+        uniforms[uniformName] = location;
+    }
+
+    void ShaderProgram::LoadAttribute( const std::string& attributeName ) throw( RendererError )
+    {
+        GLint location = glGetAttribLocation( programID, attributeName.c_str() );
+
+        if ( location == -1 )
+        {
+            std::stringstream errorMessage;
+            errorMessage << "Invalid shader program uniform: " << attributeName;
+            throw RendererError( errorMessage.str() );
+        }
+
+        attributes[attributeName] = location;
+    }
+
+    void ShaderProgram::SetUniform1i( const std::string& uniformName,
+                                      int value )
+    {
+        glUniform1i( uniforms[uniformName], value );
+    }
+
+    void ShaderProgram::SetUniform4f( const std::string& uniformName,
+                                      float value1, float value2, float value3, float value4 )
+    {
+        glUniform4f( uniforms[uniformName], value1, value2, value3, value4 );
+    }
+
+    void ShaderProgram::SetUniformMatrix4fv( const std::string& uniformMatrixName,
+                                             const glm::mat4& matrix )
+    {
+        glUniformMatrix4fv( uniforms[uniformMatrixName], 1, GL_FALSE, glm::value_ptr( matrix ) );
+    }
+
+    void ShaderProgram::SetAttribute( const std::string& attributeName,
+                                      GLuint elementsPerAttribute, GLsizei stride, const GLvoid* data )
+    {
+        glVertexAttribPointer( attributes[attributeName], elementsPerAttribute, GL_FLOAT, GL_FALSE, stride, data );
+    }
+
+    void ShaderProgram::EnableAttribute( const std::string& attributeName )
+    {
+        glEnableVertexAttribArray( attributes[attributeName] );
+    }
+
+    void ShaderProgram::DisableAttribute( const std::string& attributeName )
+    {
+        glDisableVertexAttribArray( attributes[attributeName] );
+    }
+
+    ShaderProgram::ShaderProgram() : programID( 0 ),
+                                     vertexShaderID( 0 ),
+                                     fragmentShaderID( 0 )
+    {}
+
     std::string ShaderProgram::GetProgramLog() const
     {
-        std::string result;
+        std::stringstream result;
 
         if ( !glIsProgram( programID ) )
         {
-            result = "No shader program found with ID: ";
-            result += programID;
+            result << "No shader program found with ID: " << programID;
         }
         else
         {
-            result = "Log for shader program:\n";
-            result += "\tProgram ID: ";
-            result += programID;
-            result += "\n";
+            result << "Log for shader program:" << std::endl;
+            result << "\tProgram ID: " << programID << std::endl;
 
             int maxLength = 0;
             glGetProgramiv( programID, GL_INFO_LOG_LENGTH, &maxLength );
@@ -111,14 +173,13 @@ namespace rx
 
             if ( logLength > 0 )
             {
-                result += "\t";
-                result += log;
+                result << "\t" << log;
             }
 
             delete[] log;
         }
 
-        return result;
+        return result.str();
     }
 
     std::string ShaderProgram::GetVertexShaderLog() const
@@ -131,21 +192,14 @@ namespace rx
         return GetShaderLog( fragmentShaderID );
     }
 
-    std::string ShaderProgram::GetShaderLog( GLuint shaderID ) const
+    std::string ShaderProgram::GetShaderLog( GLuint shaderID )
     {
-        std::string result;
+        std::stringstream result;
 
-        if ( !glIsShader( shaderID ) )
+        if ( glIsShader( shaderID ) )
         {
-            result = "No shader found with ID: ";
-            result += shaderID;
-        }
-        else
-        {
-            result = "Log for shader:\n";
-            result += "\tShader ID: ";
-            result += shaderID;
-            result += "\n";
+            result << "Log for shader:\n";
+            result << "\tShader ID: " << shaderID << std::endl;
 
             int maxLength = 0;
             glGetShaderiv( shaderID, GL_INFO_LOG_LENGTH, &maxLength );
@@ -156,13 +210,56 @@ namespace rx
 
             if( logLength > 0 )
             {
-                result += "\t";
-                result += log;
+                result << "\t" << log;
             }
 
             delete[] log;
         }
+        else
+        {
+            result << "No shader found with ID: " << shaderID;
+        }
 
-        return result;
+        return result.str();
+    }
+
+    GLuint ShaderProgram::LoadShaderFromFile( const std::string& filePath, GLenum shaderType ) throw( RendererError )
+    {
+        GLuint shaderID = 0;
+
+        std::ifstream sourceFile( filePath.c_str() );
+
+        if( sourceFile )
+        {
+            shaderID = glCreateShader( shaderType );
+
+            std::string shaderString;
+            shaderString.assign( std::istreambuf_iterator<char>( sourceFile ), std::istreambuf_iterator<char>() );
+
+            const char* shaderSource = shaderString.c_str();
+            glShaderSource( shaderID, 1, (const GLchar**)&shaderSource, NULL );
+
+            glCompileShader( shaderID );
+
+            GLint shaderCompiled = GL_FALSE;
+            glGetShaderiv( shaderID, GL_COMPILE_STATUS, &shaderCompiled );
+            if( shaderCompiled != GL_TRUE )
+            {
+                std::stringstream errorMessage;
+                errorMessage << "Failed to compile shader. ID: " << shaderID << ". Type: " << shaderType << std::endl;
+                errorMessage << "\tFile path: " << filePath;
+                errorMessage << "\tLog: " << GetShaderLog( shaderID );
+                glDeleteShader( shaderID );
+                throw RendererError( errorMessage.str() );
+            }
+        }
+        else
+        {
+            std::stringstream errorMessage;
+            errorMessage << "Failed to load shader file: " << filePath;
+            throw RendererError( errorMessage.str() );
+        }
+
+        return shaderID;
     }
 }

@@ -24,13 +24,6 @@ namespace rx
 
         glViewport( 0.f, 0.f, screenWidth, screenHeight );
 
-        glMatrixMode( GL_PROJECTION );
-        glLoadIdentity();
-        glOrtho( 0.0f, screenWidth, screenHeight, 0.0f, 1.0f, -1.0f );
-
-        glMatrixMode( GL_MODELVIEW );
-        glLoadIdentity();
-
         glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 
         glEnable( GL_TEXTURE_2D );
