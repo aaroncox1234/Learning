@@ -2,3 +2,4 @@
 *.o
 Builds/
 Projects/Code::Blocks/rx/bin/
+3rdParty/

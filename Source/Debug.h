@@ -6,10 +6,14 @@ void ErrorMessage( const char* message, ... );
 #ifdef RX_DEBUG
 
 void DebugMessage( const char* message, ... );
+void WarningMessage( const char* message, ... );
 
 #else
 
 #define DebugMessage( message, ... )  \
+    ; // no op
+
+#define WarningMessage( message, ... ) \
     ; // no op
 
 #endif // RX_DEBUG

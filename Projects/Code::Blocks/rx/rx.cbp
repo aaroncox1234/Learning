@@ -14,9 +14,12 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DRX_DEBUG" />
+					<Add directory="../../../3rdParty/SDL/include" />
 				</Compiler>
 				<Linker>
-					<Add option="-lGL -lGLU -lGLEW -lSDL -lSDL_image" />
+					<Add option="-lSDL2main -lSDL2" />
+					<Add directory="../../../3rdParty/SDLBuild" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -26,10 +29,12 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="../../../3rdParty/SDL/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lGL -lGLU -lGLEW -lSDL -lSDL_image" />
+					<Add option="-lSDL2main -lSDL2" />
+					<Add directory="../../../3rdParty/SDLBuild" />
 				</Linker>
 			</Target>
 		</Build>
@@ -38,17 +43,9 @@
 		</Compiler>
 		<Unit filename="../../../Builds/Linux/TestShaderProgram.glfs" />
 		<Unit filename="../../../Builds/Linux/TestShaderProgram.glvs" />
+		<Unit filename="../../../Source/Debug.cpp" />
+		<Unit filename="../../../Source/Debug.h" />
 		<Unit filename="../../../Source/Main.cpp" />
-		<Unit filename="../../../Source/rxInput.h" />
-		<Unit filename="../../../Source/rxLog.h" />
-		<Unit filename="../../../Source/rxRenderer.cpp" />
-		<Unit filename="../../../Source/rxRenderer.h" />
-		<Unit filename="../../../Source/rxShaderProgram.cpp" />
-		<Unit filename="../../../Source/rxShaderProgram.h" />
-		<Unit filename="../../../Source/rxTexture.cpp" />
-		<Unit filename="../../../Source/rxTexture.h" />
-		<Unit filename="../../../Source/rxTextureManager.cpp" />
-		<Unit filename="../../../Source/rxTextureManager.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

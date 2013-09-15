@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
+#include <cassert>
 
 #include <SDL.h>
 
@@ -68,6 +69,21 @@ void DebugMessage( const char* message, ... )
     va_end( argList );
 
     debugLog.WriteLine( formattedMessage );
+}
+
+void WarningMessage( const char* message, ... )
+{
+    va_list argList;
+    va_start( argList, message );
+
+    char buffer[256];
+    vsprintf( buffer, message, argList );
+    std::string formattedMessage = buffer;
+
+    va_end( argList );
+
+    debugLog.WriteLine( formattedMessage );
+    assert( 0 );
 }
 
 #endif // RX_DEBUG
