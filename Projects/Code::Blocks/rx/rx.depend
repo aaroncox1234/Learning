@@ -1,8 +1,11 @@
 # depslib dependency file v1.0
-1379265112 source:/home/aaron/Documents/Development/Source/Main.cpp
+1379288955 source:/home/aaron/Documents/Development/Source/Main.cpp
 	<SDL.h>
+	<SDL_image.h>
 	<stdio.h>
+	<string>
 	"Debug.h"
+	"Vector2.h"
 
 1372142316 source:/home/aaron/Documents/Development/Source/Input.cpp
 	"Input.h"
@@ -405,14 +408,36 @@
 	"begin_code.h"
 	"close_code.h"
 
-1379264446 /home/aaron/Documents/Development/Source/Debug.h
+1379288068 /home/aaron/Documents/Development/Source/Debug.h
+	"BasicTypes.h"
+	"Vector2.h"
+	<SDL.h>
 
-1379265362 source:/home/aaron/Documents/Development/Source/Debug.cpp
+1379289435 source:/home/aaron/Documents/Development/Source/Debug.cpp
 	"Debug.h"
+	<cassert>
 	<stdarg.h>
 	<stdio.h>
 	<fstream>
 	<iostream>
-	<cassert>
-	<SDL.h>
+	<list>
+
+1379288086 /home/aaron/Documents/Development/Source/BasicTypes.h
+	<vector>
+	"TypeDefs.h"
+	"Vector2.h"
+
+1379287459 /home/aaron/Documents/Development/Source/TypeDefs.h
+
+1379287610 /home/aaron/Documents/Development/Source/Vector2.h
+	"TypeDefs.h"
+
+1379267338 /home/aaron/Documents/Development/3rdParty/SDL_image//SDL_image.h
+	"SDL.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1379287640 source:/home/aaron/Documents/Development/Source/Vector2.cpp
+	"Vector2.h"
 

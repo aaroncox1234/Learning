@@ -1,66 +1,111 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2013)
-and may not be redistributed without written permission.*/
-
-//Using SDL and standard IO
 #include <SDL.h>
+#include <SDL_image.h>
 #include <stdio.h>
+#include <string>
 
 #include "Debug.h"
+#include "Vector2.h"
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+using namespace rx;
 
+const std::string WINDOW_TITLE = "Demo Land";
+const uint32 SCREEN_WIDTH = 640;
+const uint32 SCREEN_HEIGHT = 480;
 
+SDL_Window* gWindow = NULL;
+SDL_Renderer* gRenderer = NULL;
+
+void InitSDL();
+void ShutdownSDL();
+
+//Returns true if program should quit.
+bool HandleInput();
 
 int main( int argc, char* args[] )
 {
-	//The window we'll be rendering to
-	SDL_Window* window = NULL;
+	InitSDL();
 
-	//The surface contained by the window
-	SDL_Surface* screenSurface = NULL;
+	bool quit = false;
 
-    DebugMessage( "I'm the new message! %f,%f", 6.0f, 8.0f );
+    while ( !quit )
+    {
+        quit = HandleInput();
 
-    //WarningMessage( "Stuff was bad: %i", 10 );
+        SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0x00 );
+        SDL_RenderClear( gRenderer );
 
-    ErrorMessage( "I'm the error message: %i", 99 );
 
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-	}
-	else
-	{
-		//Create window
-		window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( window == NULL )
-		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-		}
-		else
-		{
-			//Get window surface
-			screenSurface = SDL_GetWindowSurface( window );
+        // Update and draw here
 
-			//Fill the surface white
-			SDL_FillRect( screenSurface, NULL, SDL_MapRGB( screenSurface->format, 0x00, 0x00, 0xFF ) );
 
-			//Update the surface
-			SDL_UpdateWindowSurface( window );
+        DrawDebugShapes( gRenderer );
 
-			//Wait two seconds
-			SDL_Delay( 2000 );
-		}
-	}
+        SDL_RenderPresent( gRenderer );
+    }
 
-	//Destroy window
-	SDL_DestroyWindow( window );
+    FreeDebugShapes();
 
-	//Quit SDL subsystems
-	SDL_Quit();
+	ShutdownSDL();
 
 	return 0;
+}
+
+void InitSDL()
+{
+    if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	{
+        ErrorMessage( "Failed to initialize SDL. SDL error: %s", SDL_GetError() );
+	}
+
+	// Use linear texture filtering.
+	if ( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+    {
+        WarningMessage( "Failed to enable linear texture filtering. SDL error: %s", SDL_GetError() );
+    }
+
+	gWindow = SDL_CreateWindow( WINDOW_TITLE.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+	if ( gWindow == NULL )
+	{
+        ErrorMessage( "Failed to create window. SDL error: %s", SDL_GetError() );
+    }
+
+    gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
+    if ( gRenderer == NULL )
+	{
+        ErrorMessage( "Failed to create renderer. SDL erorr: %s", SDL_GetError() );
+    }
+
+    int sdlImageFlags = IMG_INIT_PNG;
+    if ( !( IMG_Init( sdlImageFlags ) & sdlImageFlags ) )
+    {
+        ErrorMessage( "Failed to initialize SDL_image. SDL_image error: %s", IMG_GetError() );
+    }
+}
+
+void ShutdownSDL()
+{
+    SDL_DestroyRenderer( gRenderer );
+    gRenderer = NULL;
+
+	SDL_DestroyWindow( gWindow );
+	gWindow = NULL;
+
+	IMG_Quit();
+
+	SDL_Quit();
+}
+
+bool HandleInput()
+{
+    SDL_Event event;
+
+    while( SDL_PollEvent( &event ) != 0 )
+	{
+		if( event.type == SDL_QUIT )
+        {
+			return true;
+		}
+    }
+
+    return false;
 }

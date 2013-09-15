@@ -1,4 +1,4 @@
-Add debug warning that asserts if in debug, logs otherwise.
+Crash program in release if ErrorMessage is hit.
 
 Debug Text and Lines
 - Draw some text on screen
