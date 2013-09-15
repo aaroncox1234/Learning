@@ -1,0 +1,116 @@
+Add debug warning that asserts if in debug, logs otherwise.
+
+Debug Text and Lines
+- Draw some text on screen
+- Create a debug manager that buffers text and draws it as a stack on screen
+- Draw some colored primitives on screen
+- Add primitive drawing to debug manager
+- Make global functions for debug text and lines in same place (and manner) as DebugLog
+
+Input
+- Detect keyboard input
+- Bind function keys to toggle different debug displays
+- Create input controllers that exist as a list in game (including a debug controller for the above) that map input to actions. They should just look at SDL events directly and issue commands. They can be updated in the input loop before the game updates (and they can buffer actions).
+- Detect mouse input
+
+Sprite Rendering
+- Load and draw one sprite
+- Rotate the sprite
+- Create a texture manager class that only loads each referenced texture once
+- Create a sprite class that references part (or all) of a texture
+- The sprite should draw centered
+- Rotate and translate the sprite with input
+- Draw an image with alpha
+- Create a proper renderer class builds a render queue and draws everything. Should store a pointer to the same list of sprites as the sprite manager.
+
+Window Sizing
+- Support toggling between windowed and full screen
+
+Game Loop
+- Draw frame rate with F1
+- Support fixed or variable frame rate.
+
+Data Files
+- Load a json file
+- Use json files to specify launch info (resolution, program to run, frame rate)
+- Use json files to specify sprite properties (note: should not be tied to entities. Should be able to specify the same sprite json files for different entities). Acceptable to list all textures to load in a list, then specify named sprites. There should be one of these json files per project (level in the future). Specify in launch info. Expose a function to load a different one at run time (i.e. The launch info should specify a default).
+- Make sure the json reader can easily be used by any “game”.
+
+Input Revisited
+- Create a bindings json file that specifies control mappings
+- Update any existing input controllers to use mappings (accept for debug controllers). Create a new test controller for this and a new test project.
+
+Modes
+- Create a Game parent class
+- Allow children to implement their own “games” (input controller test, rendering test, game world, etc)
+- Create an everything project that includes all of them
+- Create a sub project that only includes the game
+
+Organization
+- Commit everything to git branch
+- Get running in visual studio
+- Reorganize folder structure
+- Get running again on linux in code blocks
+- Clean out any modes and input controllers that aren't needed. Create new ones to provide examples.
+
+Shipping
+- Test to verify that debug stuff doesn't compile when building ship
+- Output a nice directory with distribution DLLs and only the json files and other data files relevant to the project
+- Binify all text files
+
+Profiling
+- Get memory leak detection running. Windows only is fine.
+- Get performance measuring running. Windows only is fine.
+
+Particle System
+- Create a simple particle system
+- Create some test systems, like a simple smoke particle or a full screen snow effect
+- Push the number of particles and profile
+
+Quad Tree
+- Create a level with clumps of sprites with lots of space between clumps
+- Write a quad tree
+- Profile before and after
+
+Flocking
+- Create flocks that only look for simple collision primitives to avoid, they ignore normal collision and use their own
+
+Navigation
+- Create separate navigation for flying and ground objects
+- Quad tree for flying objects
+- N+ style navigation for ground objects
+- Generate flight paths and smooth them with curves
+- Measure optimizations like time slicing
+
+SAT
+
+PCG
+- Try procedurally generating a texture like in the Tiny Wings tutorial.
+- Try automatically generating a simple level
+
+Curves
+
+Skeletal Animation
+- Spider that uses IK on obstacles
+
+Multithreading
+
+Component Architecture
+- Entities exist as keys into blocks of data
+- Components are just functions that run on blocks of data
+
+Platformer Controller
+- Inclines
+- Ledges
+- Ninja rope
+- Jet pack
+
+Tiny Wings Controller
+
+Agents
+- Simple state machine collector
+- Simple queue based building that builds stuff RTS-style
+- Behavior Tree driven explorer
+
+UI
+- Ribbon
